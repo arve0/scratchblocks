@@ -33,8 +33,7 @@ ALL_LANGS = ["ar", "an", "hy", "ast", "eu", "bn_IN", "nb", "bg", "zh_CN",
 BLACKLIST = set(["or"])
 
 # ISO Codes for all the language forums.
-FORUM_LANGS = ['de', 'es', 'fr', 'zh_CN', 'pl', 'ja', 'nl' , 'pt', 'it',
-               'he', 'ko', 'nb', 'tr', 'el', 'ru', 'ca', 'id']
+FORUM_LANGS = ['nb']
 
 langs = "forum"
 if len(sys.argv) > 1:
