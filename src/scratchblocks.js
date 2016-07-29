@@ -12,7 +12,7 @@ var fs = require('fs');
 // root declarations
 var newCanvas;
 
-if (process.env.SB_TARGET === 'client') {
+if (process.env.NODE_ENV === 'production') {
   newCanvas = function () {
     return document.createElement('canvas');
   };
@@ -2473,8 +2473,9 @@ blocksBySelector['stopScripts'].specialCase = function(info, children, lang) {
   }
 };
 
+// Load translations
 loadLanguage('en', english);
-if (process.env.SB_TARGET !== 'client') {
+if (process.env.NODE_ENV !== 'production') {
   var locales = fs.readdirSync(__dirname + '/locales/');
   locales = locales.filter(f => f.search(/\.json$/) !== -1);
   locales = locales.map(f => __dirname + '/locales/' + f);

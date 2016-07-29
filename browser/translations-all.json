@@ -1,4 +1,4 @@
-scratchblocks.loadLanguages({
+{
   "an": {
     "define": [
       "definir"
@@ -16169,4 +16169,4 @@ scratchblocks.loadLanguages({
       "舞台上的其他程式"
     ]
   }
-});
+}

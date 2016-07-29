@@ -20,12 +20,11 @@ fetch.on('close', (code) => {
 
   var filename = __dirname + '/../browser/translations';
   filename += args[2] ? '-' + args[2] : '';
-  filename += '.js';
+  filename += '.json';
   filename = path.normalize(filename);
   console.log(`writing translations to ${filename}`);
 
-  var locales = 'scratchblocks.loadLanguages(' + getLocales() + ');';
-  fs.writeFileSync(filename, locales);
+  fs.writeFileSync(filename, getLocales());
 });
 
 function getLocales () {
