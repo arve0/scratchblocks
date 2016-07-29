@@ -1,41 +1,77 @@
-Make pictures of Scratch blocks from text.
+This is a fork of [tjvr/scratchblocks](https://github.com/tjvr/scratchblocks) which supports Node.js and can be used with bundlers like browserify and webpack. See [PR 187 @ tjvr](https://github.com/tjvr/scratchblocks/pull/187).
 
 [![Screenshot](http://scratchblocks.github.io/screenshot.png)](https://scratchblocks.github.io/#when%20flag%20clicked%0Aclear%0Aforever%0Apen%20down%0Aif%20%3C%3Cmouse%20down%3F%3E%20and%20%3Ctouching%20%5Bmouse-pointer%20v%5D%3F%3E%3E%20then%0Aswitch%20costume%20to%20%5Bbutton%20v%5D%0Aelse%0Aadd%20(x%20position)%20to%20%5Blist%20v%5D%0Aend%0Amove%20(foo)%20steps%0Aturn%20ccw%20(9)%20degrees)
 
-**[Try it out!](http://scratchblocks.github.io/)**
 
----
+# Install
 
-**scratchblocks** is used to write Scratch scripts:
+If you are going to use scratchblocks with Node.js, install the [Cairo dependencies](https://github.com/Automattic/node-canvas#installation) first.
 
-- in [Scratch Forum](http://scratch.mit.edu/discuss/topic/14772/) posts
-- in [Scratch Wiki](http://wiki.scratch.mit.edu/wiki/Block_Plugin) articles
-- in the [Code Club](https://www.codeclub.org.uk) project guides
-
-It's MIT licensed, so you can use it in your projects. (But do send me a link
-[on Twitter](http://twitter.com/blob8108)!)
-
-For the full guide to the syntax, see [the wiki](http://wiki.scratch.mit.edu/wiki/Block_Plugin/Syntax).
+```
+npm install arve0/scratchblocks
+```
 
 # Usage
 
-## MediaWiki
+## Node
+```js
+var scratchblocks = require('scratchblocks');
+var fs = require('fs');
 
-Use [the MediaWiki plugin](https://github.com/tjvr/wiki-scratchblocks). (This is what the [Scratch Wiki](http://wiki.scratch.mit.edu/wiki/Block_Plugin) uses.)
+var svg = scratchblocks(`
+when flag clicked
+`);
 
-## WordPress
+fs.writeFileSync('out.svg', svg);
+```
 
-I found [a WordPress plugin](https://github.com/tkc49/scratchblocks-for-wp). It might work for you; I haven't tried it.
+**Note:** If you intend to distribute SVG cross-platform, they may not look right on all systems. This is because text sizes are calculated with the [font available on the system](http://fontfamily.io/Lucida_Grande,Lucida_Sans_Unicode,Verdana,Arial,sans-serif;) you build the SVG.
 
-## Pandoc
+## Browser
+```html
+<script src="path/to/browser/scratchblocks.min.js"></script>
+<script>scratchblocks.renderMatching('pre.blocks');</script>
+```
 
-Code Club use their own [lesson_format](https://github.com/CodeClub/lesson_format) tool to generate the PDF versions of their project guides. It uses the [pandoc_scratchblocks](https://github.com/CodeClub/pandoc_scratchblocks) plugin they wrote to make pictures of Scratch scripts.
+`scratchblocks.renderMatching` will replace all code blocks with SVGs.
 
-This would probably be a good way to write a Scratch book.
+**Note:**  Browser-build is found in the [browser-folder](browser).
+
+The standard build contains all translations for the [Scratch forum](https://scratch.mit.edu/discuss/) and size is about 200k.
+
+If want to save size and only need one translation:
+
+1. clone this repo
+2. fetch translation with `npm run translations -- language_code`
+3. repackage with `npm run browser-bundle && npm run browser-min`
+
+## Bundlers
+For bundlers like browserify and webpack which respects the [`browser` hint in `package.json`](https://github.com/defunctzombie/package-browser-field-spec), `require('scratchblocks')` will point to the UMD-build `browser/scratchblocks.js`. If you instead want to compile scratchblocks yourself, use the entry-point [`browser/index.js`](browser/index.js):
+
+```js
+var scratchblocks = require('scratchblocks/browser/index.js');
+```
+
+Make sure you use some sort of unreachable branch removal, **or it will not work**. If unreachable branches are not removed, you will get the error message `TypeError: DOMParser is not a constructor` because of [variable declaration hoisting](http://www.w3schools.com/js/js_hoisting.asp).
+
+## Inline blocks
+
+To use blocks inside paragraphs:
+
+```html
+<p>Paragraph with <code class="b">stamp</code> block.</p>
+```
+
+use the `inline` option:
+
+```js
+scratchblocks.renderMatching('code.b', { inline: true });
+```
 
 ## Markdown
 
 Inline code in your markdown like this:
+
     ```blocks
     when flag clicked
     go to x:(-50) y:(0)
@@ -58,52 +94,23 @@ var md = require('markdown-it')({
 });
 ```
 
-## HTML
 
-Include the scratchblocks JS file on your webpage:
+# Translations
 
-```html
-<script src="https://scratchblocks.github.io/js/scratchblocks-3.x-min.js"></script>
-```
+Translations are fetched from the [Scratch translation server](http://translate.scratch.mit.edu).
 
-Then call `scratchblocks.renderMatching` after the page has loaded, which
-will render matching page elements to shiny scratch blocks. Its sole argument
-is the CSS-style selector for the elements that contain the scratchblocks code.
-It uses `pre.blocks` by default.
+In node, all languages in [`src/locales`](src/locales) will be loaded. If you want to fetch a specific language, use `npm run translations -- languageCode`. As of now, languages for the Scratch forum are included:
 
 ```js
-scratchblocks.renderMatching('pre.blocks');
+var FORUM_LANGS = ['de', 'es', 'fr', 'zh_CN', 'pl', 'ja', 'nl' , 'pt', 'it',
+                   'he', 'ko', 'nb', 'tr', 'el', 'ru', 'ca', 'id'];
 ```
 
-### Inline blocks
+This is also true for the browser-build. So you can fetch the languages you want and repackage with `npm run browser-bundle && npm run browser-min`.
 
-To use blocks inside a paragraph...
+If you want all languages, use `npm run translations -- all`.
 
-```html
-I'm rather fond of the <code class="b">stamp</code> block in Scratch.
-```
-
-...make a separate call to `renderMatching` using the `inline` argument.
-
-```js
-scratchblocks.renderMatching("code.b", {inline: true});
-```
-
-See the [release notes](https://github.com/tjvr/scratchblocks/releases) for more details.
-
-# Languages
-
-In node, all languages in [`src/locales`](https://github.com/tjvr/scratchblocks/blob/master/src/locales) will be loaded.
-
-In the browser, include [`translations.js`](https://github.com/tjvr/scratchblocks/blob/master/browser/translations.js), [`all-translations.js`](https://github.com/tjvr/scratchblocks/blob/master/browser/translations.js) or build your own language pack.
-
-`translations.js` contains all the languages needed [on the Scratch Forums](http://scratch.mit.edu/discuss/#category_head_6).
-
-`translations-all.js` contains all the languages Scratch supports.
-
-If you want to build your own language pack, use `npm run translations -- languageCode`.
-
-Please note that scratchblocks **requires** some [additional words](https://github.com/tjvr/scratchblocks/blob/master/src/locales/extra_aliases.js) which aren't in Scratch itself (mainly the words used for the flag and arrow images). I'd be happy to accept pull requests for those!
+Please note that scratchblocks **requires** some [additional words](src/locales/extra_aliases.js) which aren't in Scratch itself (mainly the words used for the flag and arrow images).
 
 
 # Development
@@ -117,17 +124,11 @@ npm start
 
 Then open `http://localhost:8080/`
 
-For more details, see [`CONTRIBUTING.md`](https://github.com/tjvr/scratchblocks/blob/master/.github/CONTRIBUTING.md).
+For more details, see [`CONTRIBUTING.md`](.github/CONTRIBUTING.md).
 
 
 # Credits
 
-Many, many thanks to the [contributors](https://github.com/tjvr/scratchblocks/graphs/contributors)!
+[This is a fork.](https://github.com/tjvr/scratchblocks)
 
-* Authored by [tjvr](https://github.com/tjvr)
-* SVG proof-of-concept, shapes & filters by [as-com](https://github.com/as-com)
-* Anna helped with a formula, and pointed out that I can't read graphs
-* JSO designed the syntax and wrote the original [Block Plugin](http://wiki.scratch.mit.edu/wiki/Block_Plugin_\(1.4\))
-* Help with translation code from [joooni](http://scratch.mit.edu/users/joooni/)
-* Block translations from the [Scratch translation server](http://translate.scratch.mit.edu/)
-* Ported to node by [arve0](https://github.com/arve0)
+I will try to keep it updated with tjvr/scratchblocks. PRs are welcome.
