@@ -1,11 +1,15 @@
 {
   "name": "scratchblocks",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Render Scratch blocks code to SVG.",
   "main": "src/scratchblocks.js",
   "browser": "browser/scratchblocks.js",
   "browserify": {
-    "transform": ["envify", "unreachable-branch-transform", "brfs"]
+    "transform": [
+      "envify",
+      "unreachable-branch-transform",
+      "brfs"
+    ]
   },
   "scripts": {
     "browser": "brfs src/scratchblocks.js | NODE_ENV=browser envify > src/scratchblocks-browser.js",
