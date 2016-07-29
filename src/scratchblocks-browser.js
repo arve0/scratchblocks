@@ -7,12 +7,12 @@
  * http://opensource.org/licenses/MIT
  */
 
-var fs = require('fs');
+
 
 // root declarations
 var newCanvas;
 
-if (process.env.NODE_ENV === 'browser') {
+if ("browser" === 'browser') {
   newCanvas = function () {
     return document.createElement('canvas');
   };
@@ -1346,7 +1346,7 @@ function commentLine(width, props) {
 
 /* definitions */
 // browserify inlines file as string with brfs transform
-var cssContent = fs.readFileSync(__dirname + '/style.css', 'utf8');
+var cssContent = ".sb-label {\n  font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Arial, sans-serif;\n  font-weight: bold;\n  fill: #fff;\n  font-size: 10px;\n  word-spacing: +1px;\n}\n.sb-obsolete { fill: #d42828; }\n.sb-motion { fill: #4a6cd4; }\n.sb-looks { fill: #8a55d7; }\n.sb-sound { fill: #bb42c3; }\n.sb-pen { fill: #0e9a6c;  }\n.sb-events { fill: #c88330; }\n.sb-control { fill: #e1a91a; }\n.sb-sensing { fill: #2ca5e2; }\n.sb-operators { fill: #5cb712; }\n.sb-variables { fill: #ee7d16; }\n.sb-list { fill: #cc5b22 }\n.sb-custom { fill: #632d99; }\n.sb-custom-arg { fill: #5947b1; }\n.sb-extension { fill: #4b4a60; }\n.sb-grey { fill: #969696; }\n.sb-bevel {\n  filter: url(#bevelFilter);\n}\n.sb-input {\n  filter: url(#inputBevelFilter);\n}\n.sb-input-number,\n.sb-input-string,\n.sb-input-number-dropdown {\n  fill: #fff;\n}\n.sb-literal-number,\n.sb-literal-string,\n.sb-literal-number-dropdown,\n.sb-literal-dropdown {\n  font-weight: normal;\n  font-size: 9px;\n  word-spacing: 0;\n}\n.sb-literal-number,\n.sb-literal-string,\n.sb-literal-number-dropdown {\n  fill: #000;\n}\n.sb-darker {\n  filter: url(#inputDarkFilter);\n}\n.sb-outline {\n  stroke: #fff;\n  stroke-opacity: 0.2;\n  stroke-width: 2;\n  fill: none;\n}\n.sb-define-hat-cap {\n  stroke: #632d99;\n  stroke-width: 1;\n  fill: #8e2ec2;\n}\n.sb-comment {\n  fill: #ffffa5;\n  stroke: #d0d1d2;\n  stroke-width: 1;\n}\n.sb-comment-line {\n  fill: #ffff80;\n}\n.sb-comment-label {\n  font-family: DejaVu Sans, Helvetica, Arial, sans-serif;\n  font-weight: bold;\n  fill: #5c5d5f;\n  word-spacing: 0;\n  font-size: 12px;\n}\n";
 
 function makeStyle() {
   var style = el('style');
@@ -2475,8 +2475,8 @@ blocksBySelector['stopScripts'].specialCase = function(info, children, lang) {
 
 // Load translations
 loadLanguage('en', english);
-if (process.env.NODE_ENV !== 'browser') {
-  var locales = fs.readdirSync(__dirname + '/locales/');
+if ("browser" !== 'browser') {
+  var locales = ["README.md","ca.json","de.json","el.json","es.json","extra_aliases.js","fr.json","he.json","id.json","it.json","ja.json","ko.json","nb.json","nl.json","pl.json","pt.json","ru.json","tr.json","zh_CN.json"];
   locales = locales.filter(f => f.search(/\.json$/) !== -1);
   locales = locales.map(f => __dirname + '/locales/' + f);
   locales.forEach(filename => {

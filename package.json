@@ -8,11 +8,12 @@
     "transform": ["envify", "unreachable-branch-transform", "brfs"]
   },
   "scripts": {
-    "browser": "NODE_ENV=production browserify browser/index.js --no-browser-field --standalone scratchblocks -o browser/scratchblocks.js",
+    "browser": "brfs src/scratchblocks.js | NODE_ENV=browser envify > src/scratchblocks-browser.js",
+    "browser-bundle": "NODE_ENV=browser browserify browser/index.js --no-browser-field --standalone scratchblocks -o browser/scratchblocks.js",
     "browser-min": "uglifyjs browser/scratchblocks.js > browser/scratchblocks.min.js",
-    "browser-watch": "NODE_ENV=production watchify browser/index.js --no-browser-field --standalone scratchblocks -o browser/scratchblocks.js",
+    "browser-watch": "NODE_ENV=browser watchify browser/index.js --no-browser-field --standalone scratchblocks -o browser/scratchblocks.js",
     "lint": "eslint src",
-    "pre-publish": "npm run translations -- all && npm run translations && npm run browser && npm run browser-min",
+    "pre-publish": "npm run translations && npm run browser && npm run browser-bundle && npm run browser-min",
     "server": "http-server ./browser",
     "start": "concurrently \"npm run browser-watch\" \"npm run server\"",
     "test": "npm run translations && node tests/test.js",
