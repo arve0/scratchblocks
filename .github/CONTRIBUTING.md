@@ -1,4 +1,4 @@
-This is a fork of [tjvr/scratchblocks], consider sending issues / PRs there. I will try to keep up with changes in tjvr.
+This is a fork of [tjvr/scratchblocks](https://github.com/tjvr/scratchblocks), consider sending issues / PRs there. I will try to keep up with changes in tjvr.
 
 ---
 
