@@ -3,12 +3,17 @@
   "version": "4.0.0",
   "description": "Render Scratch blocks code to SVG.",
   "main": "src/scratchblocks.js",
+  "browser": "browser/bundle.js",
+  "browserify": {
+    "transform": ["envify", "unreachable-branch-transform", "brfs"]
+  },
   "scripts": {
-    "browser": "SB_TARGET='client' browserify --standalone scratchblocks -t envify -t unreachable-branch-transform  -t brfs src/scratchblocks.js -o browser/scratchblocks.js",
-    "browser-min": "uglifyjs browser/scratchblocks.js > browser/scratchblocks.min.js",
-    "browser-watch": "SB_TARGET='client' watchify --standalone scratchblocks -t envify -t unreachable-branch-transform  -t brfs src/scratchblocks.js -o browser/scratchblocks.js",
+    "browser": "SB_TARGET='client' browserify --no-browser-field --standalone scratchblocks src/scratchblocks.js -o browser/scratchblocks.js",
+    "browser-watch": "SB_TARGET='client' watchify --no-browser-field --standalone scratchblocks src/scratchblocks.js -o browser/scratchblocks.js",
+    "bundle": "concat-cli -f browser/scratchblocks.js browser/translations.js -o browser/bundle.js",
+    "bundle-min": "uglifyjs browser/bundle.js > browser/bundle.min.js",
     "lint": "eslint src",
-    "pre-publish": "npm run translations -- all && npm run translations && npm run browser && npm run browser-min",
+    "pre-publish": "npm run translations -- all && npm run translations && npm run browser && npm run bundle && npm run bundle-min",
     "server": "http-server ./browser",
     "start": "concurrently \"npm run browser-watch\" \"npm run server\"",
     "test": "npm run translations && node tests/test.js",
@@ -16,20 +21,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tjvr/scratchblocks.git"
+    "url": "git+https://github.com/arve0/scratchblocks.git"
   },
   "keywords": [
     "scratch"
   ],
-  "author": "tjvr",
+  "author": "arve0",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tjvr/scratchblocks/issues"
+    "url": "https://github.com/arve0/scratchblocks/issues"
   },
-  "homepage": "https://scratchblocks.github.io/",
+  "homepage": "https://github.com/arve0/scratchblocks",
   "devDependencies": {
     "brfs": "^1.4.3",
     "chalk": "^1.1.3",
+    "concat-cli": "^4.0.0",
     "concurrently": "^2.2.0",
     "envify": "^3.4.1",
     "eslint": "^3.1.1",
@@ -40,7 +46,7 @@
     "unreachable-branch-transform": "^0.5.1",
     "watchify": "^3.7.0"
   },
-  "dependencies": {
+  "optionalDependencies": {
     "canvas": "1.4.0",
     "node-fetch": "^1.5.3",
     "xmldom": "^0.1.22"
