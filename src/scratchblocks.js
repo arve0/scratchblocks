@@ -960,8 +960,11 @@ function parse(code, options) {
 
 /* for constructing SVGs */
 
-var xml = new DOMParser().parseFromString('<xml></xml>',  'application/xml');
+function newXML() {
+  return new DOMParser().parseFromString('<xml></xml>',  'application/xml');
+}
 function cdata(content) {
+  var xml = cdata.xml || (cdata.xml = newXML());
   return xml.createCDATASection(content);
 }
 
