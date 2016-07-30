@@ -5251,6 +5251,9 @@ function parse(code, options) {
     languages: Object.keys(allLanguages),
   }, options);
 
+  code = code.replace(/&lt;/g, '<');
+  code = code.replace(/&gt;/g, '>');
+
   if (options.inline) {
     code = code.replace(/\n/g, ' ');
   }
